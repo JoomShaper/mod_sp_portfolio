@@ -21,11 +21,6 @@ if(($direction=='rtl') || ($rtl)) {
 	$rtl 							= false;
 }
 
-if( JVERSION >= 3 )
-{
-	JHtml::_('jquery.framework');
-}
-
 //Basic
 $moduleclass_sfx 					= $params->get('moduleclass_sfx');
 $moduleName         				= basename(dirname(__FILE__));
@@ -66,8 +61,16 @@ if($rtl)
 else
 	$doc->addStylesheet(JURI::base(true) . '/modules/'.$moduleName.'/assets/css/slimbox2.css');
 
-if ($load_jquery) $doc->addScript(JURI::base(true) . '/modules/'.$moduleName.'/assets/js/jquery.min.js');
+
+if( JVERSION >= 3 )
+{
+	JHtml::_('jquery.framework');
+} else {
+	if ($load_jquery) $doc->addScript(JURI::base(true) . '/modules/'.$moduleName.'/assets/js/jquery.min.js');	
+}
+
 if ($show_filter) $doc->addScript(JURI::base(true) . '/modules/'.$moduleName.'/assets/js/jquery.isotope.min.js');
-if ($show_filter) $doc->addScript(JURI::base(true) . '/modules/'.$moduleName.'/assets/js/slimbox2.js');
+
+$doc->addScript(JURI::base(true) . '/modules/'.$moduleName.'/assets/js/slimbox2.js');
 
 require(JModuleHelper::getLayoutPath($moduleName, $module_layout));

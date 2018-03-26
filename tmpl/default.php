@@ -3,13 +3,13 @@
 # SP Portfolio - Simple Portfolio module by JoomShaper.com
 # -------------------------------------------------------------
 # Author    JoomShaper http://www.joomshaper.com
-# Copyright (C) 2010 - 2013 JoomShaper.com. All Rights Reserved.
+# Copyright (C) 2010 - 2018 JoomShaper.com. All Rights Reserved.
 # @license - GNU/GPL V2 or Later
 # Websites: http://www.joomshaper.com
 */
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
-$count = count($items);
+$count = count((array)$items);
 ?>
 
 <?php if( $ajaxRequest ){ ?>

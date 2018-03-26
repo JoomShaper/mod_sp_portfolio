@@ -3,18 +3,19 @@
 # SP Portfolio - Simple Portfolio module by JoomShaper.com
 # -------------------------------------------------------------
 # Author    JoomShaper http://www.joomshaper.com
-# Copyright (C) 2010 - 2014 JoomShaper.com. All Rights Reserved.
+# Copyright (C) 2010 - 2018 JoomShaper.com. All Rights Reserved.
 # @license - GNU/GPL V2 or Later
-# Websites: http://www.joomshaper.com
+# Websites: https://www.joomshaper.com
 */
 
 // no direct access
 defined('_JEXEC') or die('Restricted access');
 
-require_once JPATH_SITE.'/components/com_content/helpers/route.php';
 jimport( 'joomla.plugin.helper' );
 jimport( 'joomla.application.categories' );
+
 JModelLegacy::addIncludePath(JPATH_SITE.'/components/com_content/models', 'ContentModel');
+JLoader::register('ContentHelperRoute', JPATH_SITE . '/components/com_content/helpers/route.php');
 
 abstract class modSPPortfolioJHelper
 {
@@ -76,7 +77,7 @@ abstract class modSPPortfolioJHelper
 		$model->setState('list.direction', $ordering);
 
 		$items = $model->getItems();
-		
+
 		foreach ($items as &$item) {
 		
 			$item->slug 			= $item->id.':'.$item->alias;
@@ -88,9 +89,7 @@ abstract class modSPPortfolioJHelper
 			$item->title 			= htmlspecialchars($item->title);
 			$item->urls 			= json_decode($item->urls);
 			$item->introtext 		= JHtml::_('content.prepare', $item->introtext);
-			$nonsefurl 				= ContentHelperRoute::getArticleRoute($item->slug, $item->catslug);
-			$nonsefurl				= preg_replace('/Itemid=(.+)/', 'Itemid=0', $nonsefurl );
-			$item->link 			= JRoute::_($nonsefurl);
+			$item->link 			= JRoute::_(ContentHelperRoute::getArticleRoute($item->slug, $item->catid, $item->language));
 		}	
 		return $items;
 		
@@ -143,15 +142,18 @@ abstract class modSPPortfolioJHelper
 		
 		$items = $model->getItems();
 		
-		return count($items);
+		return count((array)$items);
 	}
 
 
 	//Get categories
 	public static function categories($parent){
-		$db = JFactory::getDBO();
-		$query = "SELECT id FROM #__categories WHERE `parent_id`='" . $parent. "' AND `published`='1'";
-		$db->setQuery($query); 
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select($db->quoteName(array('id')));
+		$query->from($db->quoteName('#__categories'));
+		$query->where($db->quoteName('parent_id') . ' = '. $db->quote($parent));
+		$db->setQuery($query);
 		$catids = $db->loadColumn();
 		return $catids;
 	}

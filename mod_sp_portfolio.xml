@@ -7,7 +7,7 @@
 	<license>GNU/GPL V2 or later</license>
 	<authorEmail>support@joomshaper.com</authorEmail>
 	<authorUrl>www.joomshaper.com</authorUrl>
-	<version>1.4</version>
+	<version>1.5</version>
 	<description>Portfolio moudue for Joomla</description>
 	<files>
 		<filename module="mod_sp_portfolio">mod_sp_portfolio.php</filename>
